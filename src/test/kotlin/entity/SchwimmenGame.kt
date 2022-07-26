@@ -3,16 +3,19 @@ package entity
 import kotlin.test.*
 import tools.aqua.bgw.util.*
 
-class SchwimmenGameTest {
+/**
+ * Test cases for [SchwimmenGame]
+ */
 
-    fun createCards(numCards: Int): MutableList<SchwimmenCard> {
+class SchwimmenGameTest{
+
+    private fun createCards(numCards: Int): MutableList<SchwimmenCard> {
         val cards = mutableListOf<SchwimmenCard>()
         for (i in 1..numCards) {
             cards.add(SchwimmenCard(CardSuit.CLUBS, CardValue.ACE))
         }
         return cards
     }
-
 
     /**
      * Test of creating a game in [SchwimmenGame] with correct parameters
