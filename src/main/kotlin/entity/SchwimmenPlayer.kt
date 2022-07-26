@@ -10,11 +10,20 @@ package entity
 class SchwimmenPlayer(val playerCards: Array<SchwimmenCard>, val name: String){
 
     var points: Float = 0.0F
+        set(value){
+            //Ensures that the points are in the right range
+            if(value < 0 || value > 31){
+                throw IllegalArgumentException("The points must be between 0 and 31!")
+            }
+            field = value
+        }
 
     init{
+        //Checks name if it is empty
         if(name.isEmpty()){
             throw IllegalArgumentException("Name must not be empty!")
         }
+        //Ensures that the player cards size is always 3
         if(playerCards.size != 3){
             throw IllegalArgumentException("PLayer must have 3 playing cards!")
         }
