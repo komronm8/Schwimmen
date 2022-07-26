@@ -2,6 +2,9 @@ package entity
 
 import kotlin.test.*
 
+/**
+ * Test cases for [SchwimmenPlayer]
+ */
 class SchwimmenPlayerTest {
 
     /**
