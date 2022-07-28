@@ -28,9 +28,9 @@ class SchwimmenGameTest{
             SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN))
         val player1 = SchwimmenPlayer(playercards, "John")
         val player2 = SchwimmenPlayer(playercards, "Max")
-        val players = arrayOf( player1, player2)
+        val players = listOf( player1, player2)
         val cards = Stack(createCards(20))
-        val arrayTableCards = arrayOf(
+        val arrayTableCards = mutableListOf(
             SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN),
             SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN),
             SchwimmenCard(CardSuit.DIAMONDS, CardValue.JACK)
