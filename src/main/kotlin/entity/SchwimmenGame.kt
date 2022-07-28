@@ -2,8 +2,8 @@ package entity
 import tools.aqua.bgw.util.*
 
 class SchwimmenGame(
-    val players: Array<SchwimmenPlayer>,
-    val tableCards: Array<SchwimmenCard>,
+    val players: List<SchwimmenPlayer>,
+    val tableCards: MutableList<SchwimmenCard>,
     val cardStack: Stack<SchwimmenCard>){
 
     var knocked: SchwimmenPlayer? = null
