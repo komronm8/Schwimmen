@@ -7,7 +7,7 @@ package entity
  * @param playerCards list of the cards that the player has
  * @throws IllegalArgumentException if [name] is empty or [playerCards] is not equal to 3
  */
-class SchwimmenPlayer(val playerCards: Array<SchwimmenCard>, val name: String){
+class SchwimmenPlayer(val playerCards: MutableList<SchwimmenCard>, val name: String){
 
     var points: Float = 0.0F
         set(value){
