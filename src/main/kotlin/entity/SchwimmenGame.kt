@@ -16,12 +16,12 @@ class SchwimmenGame(
         }
 
     var passCount: Int = 0
-        set(pCount){
+        set(passCount){
             //the amount of passes cannot exceed the amount of players
-            if(pCount < 0 || pCount > players.size){
+            if(passCount < 0 || passCount > players.size){
                 throw IllegalArgumentException("Count number must be between 0 and 4!")
             }
-            field = pCount
+            field = passCount
         }
 
     var currentPlayerIndex: Int = 0
