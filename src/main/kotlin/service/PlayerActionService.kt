@@ -34,8 +34,21 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
     fun swapAllCards(): Unit{
         val game = root.currentGame
         checkNotNull(game)
-
+        val currentPlayer = game.players[game.currentPlayerIndex]
+        val temporaryList = currentPlayer.playerCards
+        //overwrite playerCards with tableCards
+        currentPlayer.playerCards.clear()
+        currentPlayer.playerCards = game.tableCards
+        //overwrite tableCards with content of temporaryList
+        game.tableCards.clear()
+        game.tableCards.addAll(temporaryList)
+        //configure passCount/playerPoints, refresh view and go to next player
+        game.passCount = 0
+        calculatePlayerPoints(currentPlayer)
+        onAllRefreshables { refreshAfterSwapCards() }
+        root.gameService.nextPlayer()
     }
+
     fun pass(): Unit{}
 
     fun knock(): Unit{}
