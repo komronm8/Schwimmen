@@ -13,7 +13,7 @@ class SchwimmenPlayerTest {
     @Test
     fun test1(){
         val playerName = "Anton"
-        val playercards = arrayOf(
+        val playercards = mutableListOf(
             SchwimmenCard(CardSuit.SPADES, CardValue.ACE),
             SchwimmenCard(CardSuit.CLUBS, CardValue.JACK),
             SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN)
@@ -31,7 +31,7 @@ class SchwimmenPlayerTest {
     @Test
     fun test2(){
         val playerName = ""
-        val playercards = arrayOf(
+        val playercards = mutableListOf(
             SchwimmenCard(CardSuit.SPADES, CardValue.ACE),
             SchwimmenCard(CardSuit.CLUBS, CardValue.JACK),
             SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN)
@@ -46,7 +46,7 @@ class SchwimmenPlayerTest {
     @Test
     fun test3(){
         val playerName = "Max"
-        val playercards = arrayOf(
+        val playercards = mutableListOf(
             SchwimmenCard(CardSuit.SPADES, CardValue.ACE),
             SchwimmenCard(CardSuit.CLUBS, CardValue.JACK),
         )
@@ -60,7 +60,7 @@ class SchwimmenPlayerTest {
     @Test
     fun test4(){
         val playerName = "Anton"
-        val playercards = arrayOf(
+        val playercards = mutableListOf(
             SchwimmenCard(CardSuit.SPADES, CardValue.ACE),
             SchwimmenCard(CardSuit.CLUBS, CardValue.JACK),
             SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN)

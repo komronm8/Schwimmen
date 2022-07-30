@@ -22,7 +22,7 @@ class SchwimmenGameTest{
      */
     @Test
     fun test1(){
-        val playercards = arrayOf(
+        val playercards = mutableListOf(
             SchwimmenCard(CardSuit.SPADES, CardValue.ACE),
             SchwimmenCard(CardSuit.CLUBS, CardValue.JACK),
             SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN))
