@@ -49,7 +49,31 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         root.gameService.nextPlayer()
     }
 
-    fun pass(): Unit{}
+    fun pass(): Unit{
+        val game = root.currentGame
+        checkNotNull(game)
+        game.passCount++
+        //check if all players have passed
+        if( game.passCount < game.players.size){
+            root.gameService.nextPlayer()
+        }
+        else{
+            //change tableCards if there are more than 3 cards in the stack
+            if( game.cardStack.size >= 3 ){
+                //clear the current tableCards and add the another 3 from the cardStack
+                game.tableCards.clear()
+                game.tableCards.addAll(game.cardStack.popAll(3))
+                //configure passCount, refresh view and go to next player
+                game.passCount = 0
+                onAllRefreshables { refreshAfterAllPass() }
+                root.gameService.nextPlayer()
+            }
+            //else end the game
+            else{
+                root.gameService.endGame()
+            }
+        }
+    }
 
     fun knock(): Unit{}
 
