@@ -44,7 +44,24 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
         onAllRefreshables { refreshAfterGameEnd() }
     }
 
-    fun nextPlayer(): Unit{}
+    fun nextPlayer(): Unit{
+        val game = root.currentGame
+        checkNotNull(game){"There is no game!"}
+        //find next player
+        val nextPlayer: SchwimmenPlayer
+        if(game.currentPlayerIndex == game.players.lastIndex){
+            nextPlayer = game.players[0]
+            game.currentPlayerIndex = 0
+        } else {
+            nextPlayer = game.players[game.currentPlayerIndex + 1]
+            game.currentPlayerIndex ++
+        }
+        //check if next player has knocked
+        if(nextPlayer == game.knocked){
+            endGame()
+        }
+        onAllRefreshables { refreshAfterNextPlayer() }
+    }
 
     private fun generateCards(): Stack<SchwimmenCard>{
 
