@@ -65,5 +65,36 @@ class ServiceTest {
         assertTrue { game.currentGame == null }
     }
 
-
+    @Test
+    fun testSwapOneCard(){
+        val game = SchwimmenGameRootService()
+        val playerNames = arrayOf("Max", "Alex", "Sofia")
+        //test for when testSwapOneCard is called when there is no game
+        assertFailsWith<IllegalStateException> { game.playerActionService.swapOneCard(
+            SchwimmenCard(CardSuit.SPADES, CardValue.ACE), SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN))}
+        game.gameService.startNewGame(playerNames)
+        val tableCards = mutableListOf(
+            SchwimmenCard(CardSuit.SPADES, CardValue.ACE),
+            SchwimmenCard(CardSuit.CLUBS, CardValue.JACK),
+            SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN))
+        val playerCards = mutableListOf(
+            SchwimmenCard(CardSuit.DIAMONDS, CardValue.EIGHT),
+            SchwimmenCard(CardSuit.CLUBS, CardValue.NINE),
+            SchwimmenCard(CardSuit.HEARTS, CardValue.SEVEN))
+        game.currentGame?.tableCards?.clear()
+        game.currentGame?.tableCards?.addAll(tableCards)
+        game.currentGame?.players?.get(0)?.playerCards?.clear()
+        game.currentGame?.players?.get(0)?.playerCards?.addAll(playerCards)
+        //test for when the player or table card does not exist
+        assertFailsWith<IllegalStateException> { game.playerActionService.swapOneCard(
+            SchwimmenCard(CardSuit.CLUBS, CardValue.KING),
+            SchwimmenCard(CardSuit.CLUBS, CardValue.KING) )
+        }
+        //test if the method has worked correctly
+        game.playerActionService.swapOneCard(
+            SchwimmenCard(CardSuit.CLUBS, CardValue.JACK),
+            SchwimmenCard(CardSuit.HEARTS, CardValue.SEVEN))
+        assertTrue { tableCards[1] == game.currentGame?.players?.get(0)?.playerCards?.get(2) }
+        assertTrue { playerCards[2] == game.currentGame?.tableCards?.get(1) }
+    }
 }
