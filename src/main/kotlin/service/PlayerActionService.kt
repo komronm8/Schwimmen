@@ -24,7 +24,7 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         if(tableCard !in game.tableCards || playerCard !in currentPlayer.playerCards){
             throw IllegalStateException("The specified card does not exist!")
         }
-        //Swaping of cards
+        //Swapping of cards
         for( i in game.tableCards.indices){
             if( tableCard == game.tableCards[i] ){
                 game.tableCards[i] = playerCard
