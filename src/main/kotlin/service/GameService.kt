@@ -28,7 +28,7 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
 
     fun nextGame(): Unit{
         val game = root.currentGame
-        checkNotNull(game){"There is no game!"}
+        checkNotNull(game){"There is no game to start new round!"}
         val players = mutableListOf<String>()
         for ( i in game.players.indices ){
             players.add(game.players[i].name)
@@ -37,7 +37,12 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
         startNewGame(players.toTypedArray())
     }
 
-    fun endGame(): Unit{}
+    fun endGame(): Unit{
+        val game = root.currentGame
+        checkNotNull(game){"There is no game!"}
+        root.currentGame = null
+        onAllRefreshables { refreshAfterGameEnd() }
+    }
 
     fun nextPlayer(): Unit{}
 
