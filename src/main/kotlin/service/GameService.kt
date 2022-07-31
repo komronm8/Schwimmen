@@ -8,6 +8,10 @@ import tools.aqua.bgw.util.Stack
 class GameService(private val root: SchwimmenGameRootService): AbstractRefreshingService(){
 
     fun startNewGame(playerNames: Array<String>){
+        //check if there is no game running
+        if(root.currentGame != null){
+            throw IllegalStateException("There is a game running already!")
+        }
         val stackOfCards = generateCards()
         val tableCards = stackOfCards.popAll(3).toMutableList()
         // checks if amount of playerNames are valid
@@ -15,14 +19,23 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
             throw IllegalArgumentException("Number of players are not between 2 and 4!")
         }
         val players = mutableListOf<SchwimmenPlayer>()
-        for (i in playerNames.indices){
+        for ( i in playerNames.indices ){
             players.add(SchwimmenPlayer(stackOfCards.popAll(3).toMutableList(),playerNames[i]))
         }
-        val game = SchwimmenGame(players, tableCards, stackOfCards)
-
+        root.currentGame = SchwimmenGame(players, tableCards, stackOfCards)
+        onAllRefreshables(Refreshable::refreshAfterStartNewGame)
     }
 
-    fun nextGame(): Unit{}
+    fun nextGame(): Unit{
+        val game = root.currentGame
+        checkNotNull(game){"There is no game!"}
+        val players = mutableListOf<String>()
+        for ( i in game.players.indices ){
+            players.add(game.players[i].name)
+        }
+        root.currentGame = null
+        startNewGame(players.toTypedArray())
+    }
 
     fun endGame(): Unit{}
 
