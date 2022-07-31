@@ -1,8 +1,6 @@
 package service
 
-import entity.SchwimmenCard
-import entity.SchwimmenGame
-import entity.SchwimmenPlayer
+import entity.*
 
 class PlayerActionService(private val root: SchwimmenGameRootService): AbstractRefreshingService() {
 
@@ -31,6 +29,7 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         onAllRefreshables { refreshAfterSwapCards() }
         root.gameService.nextPlayer()
     }
+
     fun swapAllCards(): Unit{
         val game = root.currentGame
         checkNotNull(game)
@@ -75,9 +74,59 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         }
     }
 
-    fun knock(): Unit{}
+    fun knock(): Unit{
+        val game = root.currentGame
+        checkNotNull(game)
+        if(game.knocked != null){
+            throw IllegalStateException("Someone has already knocked!")
+        }
+        val currentPlayer = game.players[game.currentPlayerIndex]
+        game.knocked = currentPlayer
+        root.gameService.nextPlayer()
+    }
 
-    private fun calculatePlayerPoints(player: SchwimmenPlayer): Unit{}
+    private fun calculatePlayerPoints(player: SchwimmenPlayer): Unit{
+        val playerHand = player.playerCards
+        var isSameTyped = true
+        //check if all the cards are the same type
+        for( i in playerHand.indices ){
+            if(playerHand[i].value != playerHand[i].value){
+                isSameTyped = false
+                break
+            }
+        }
+        if(isSameTyped){
+            player.points = 30.5f
+        }
+        //otherwise calculate points
+        var result = 0.0f
+        var sum = 0.0f
+        for( i in playerHand.indices ){
+            sum = 0.0f
+            for( suit in CardSuit.values() ) {
+                if( suit == playerHand[i].suit ){
+                    sum += when (playerHand[i].value) {
+                        CardValue.SEVEN -> 7
+                        CardValue.EIGHT -> 8
+                        CardValue.NINE -> 9
+                        CardValue.TEN -> 10
+                        CardValue.JACK -> 10
+                        CardValue.QUEEN -> 10
+                        CardValue.KING -> 10
+                        CardValue.ACE -> 11
+                        else -> {
+                            throw IllegalArgumentException("Card value is invalid!")
+                        }
+                    }
+
+                }
+                if(sum > result){
+                    result = sum
+                }
+            }
+        }
+        player.points = result
+    }
 
 
 }
