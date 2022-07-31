@@ -25,7 +25,7 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
         val stackOfCards = generateCards()
         val tableCards = stackOfCards.popAll(3).toMutableList()
         // checks if amount of playerNames are valid
-        require(playerNames.size !in 2..4) {"Number of players are not between 2 and 4!"}
+        require(playerNames.size in 2..4) {"Number of players are not between 2 and 4!"}
         val players = mutableListOf<SchwimmenPlayer>()
         for ( i in playerNames.indices ){
             players.add(SchwimmenPlayer(stackOfCards.popAll(3).toMutableList(),playerNames[i]))
