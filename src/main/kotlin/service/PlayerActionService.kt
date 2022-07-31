@@ -2,8 +2,20 @@ package service
 
 import entity.*
 
+/**
+ * Class responsible for the player actions and provides the logic as well.
+ */
 class PlayerActionService(private val root: SchwimmenGameRootService): AbstractRefreshingService() {
 
+    /**
+     * Swaps a card from the players hand with a table card that the player
+     * Then configures the points and pass count, refreshes the application and goes to the next player
+     * @param tableCard the table card which will be swapped with the player card
+     * @param playerCard the player card which will get swapped with the table card
+     * @throws IllegalStateException if no game has started yet
+     * @throws IllegalStateException if tableCard is not a real table card or if playerCard is not a real
+     * player card
+     */
     fun swapOneCard(tableCard: SchwimmenCard, playerCard: SchwimmenCard): Unit{
         val game = root.currentGame
         checkNotNull(game)
@@ -30,6 +42,10 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         root.gameService.nextPlayer()
     }
 
+    /**
+     * Swaps all the cards from the players hand with the table cards
+     * @throws IllegalStateException if no game has started yet
+     */
     fun swapAllCards(): Unit{
         val game = root.currentGame
         checkNotNull(game)
@@ -48,6 +64,11 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         root.gameService.nextPlayer()
     }
 
+    /**
+     * Pass function for the players. If everybody has passed the game ends, else pass count gets incremented
+     * and passes to the next player
+     * @throws IllegalStateException if no game has started yet
+     */
     fun pass(): Unit{
         val game = root.currentGame
         checkNotNull(game)
@@ -74,6 +95,12 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         }
     }
 
+    /**
+     * Knock function for the players. When someone knocks from there every other player has one more turn,
+     * then the game ends
+     * @throws IllegalStateException if no game has started yet
+     * @throws IllegalStateException if someone has already knocked
+     */
     fun knock(): Unit{
         val game = root.currentGame
         checkNotNull(game)
@@ -85,6 +112,11 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         root.gameService.nextPlayer()
     }
 
+    /**
+     * Private function to calculate the points of the player. Checks if the player has the same type of
+     * card values, else just calculates as usual by summing the values
+     * @param player the [SchwimmenPlayer] that will get its points calculated
+     */
     private fun calculatePlayerPoints(player: SchwimmenPlayer): Unit{
         val playerHand = player.playerCards
         var isSameTyped = true
@@ -98,7 +130,8 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         if(isSameTyped){
             player.points = 30.5f
         }
-        //otherwise calculate points
+        //otherwise calculate points by finding the highest sum of the card values
+        //which have the same card suit
         var result = 0.0f
         var sum = 0.0f
         for( i in playerHand.indices ){
@@ -118,15 +151,10 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
                             throw IllegalArgumentException("Card value is invalid!")
                         }
                     }
-
                 }
-                if(sum > result){
-                    result = sum
-                }
+                if(sum > result){ result = sum }
             }
         }
         player.points = result
     }
-
-
 }
