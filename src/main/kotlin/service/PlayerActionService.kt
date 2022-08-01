@@ -75,7 +75,7 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         val game = root.currentGame
         checkNotNull(game)
         game.passCount++
-        //check if all players have passed
+        //check if not all players have passed
         if( game.passCount < game.players.size){
             root.gameService.nextPlayer()
         }
