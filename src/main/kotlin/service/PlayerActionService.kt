@@ -51,9 +51,11 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         val game = root.currentGame
         checkNotNull(game)
         val currentPlayer = game.players[game.currentPlayerIndex]
-        val temporaryList = currentPlayer.playerCards
+        val temporaryList = mutableListOf<SchwimmenCard>()
+        temporaryList.addAll(currentPlayer.playerCards)
         //overwrite playerCards with tableCards
-        currentPlayer.playerCards = game.tableCards
+        currentPlayer.playerCards.clear()
+        currentPlayer.playerCards.addAll(game.tableCards)
         //overwrite tableCards with content of temporaryList
         game.tableCards.clear()
         game.tableCards.addAll(temporaryList)
