@@ -2,6 +2,7 @@ package service
 
 import kotlin.test.*
 import entity.*
+import org.junit.jupiter.api.assertDoesNotThrow
 
 /**
  * Class that provides tests for [GameService] and [PlayerActionService] by basically playing through some
@@ -9,6 +10,9 @@ import entity.*
  */
 class ServiceTest {
 
+    /**
+     * Tests for the method startNewGame() from the class [GameService]
+     */
     @Test
     fun testStartNewGame(){
         val game = SchwimmenGameRootService()
@@ -26,6 +30,9 @@ class ServiceTest {
         assertFailsWith<IllegalArgumentException> { game.gameService.startNewGame(invalidPlayerAmount) }
     }
 
+    /**
+     * Tests for the method nextGame() from the class [GameService]
+     */
     @Test
     fun testNextGame(){
         val game = SchwimmenGameRootService()
@@ -38,6 +45,9 @@ class ServiceTest {
         assertTrue { game.currentGame != null }
     }
 
+    /**
+     * Tests for the method endGame() from the class [GameService]
+     */
     @Test
     fun testEndGame(){
         val game = SchwimmenGameRootService()
@@ -51,6 +61,9 @@ class ServiceTest {
         assertTrue { game.currentGame == null }
     }
 
+    /**
+     * Tests for the method nextPlayer() from the class [GameService]
+     */
     @Test
     fun testNextPlayer(){
         val game = SchwimmenGameRootService()
@@ -65,11 +78,14 @@ class ServiceTest {
         assertTrue { game.currentGame == null }
     }
 
+    /**
+     * Tests for the method swapOneCard() from the class [PlayerActionService]
+     */
     @Test
     fun testSwapOneCard(){
         val game = SchwimmenGameRootService()
         val playerNames = arrayOf("Max", "Alex", "Sofia")
-        //test for when testSwapOneCard is called when there is no game
+        //test for when SwapOneCard is called and there is no game
         assertFailsWith<IllegalStateException> { game.playerActionService.swapOneCard(
             SchwimmenCard(CardSuit.SPADES, CardValue.ACE), SchwimmenCard(CardSuit.HEARTS, CardValue.QUEEN))}
         game.gameService.startNewGame(playerNames)
@@ -96,5 +112,67 @@ class ServiceTest {
             SchwimmenCard(CardSuit.HEARTS, CardValue.SEVEN))
         assertTrue { tableCards[1] == game.currentGame?.players?.get(0)?.playerCards?.get(2) }
         assertTrue { playerCards[2] == game.currentGame?.tableCards?.get(1) }
+    }
+
+    /**
+     * Tests for the method swapAllCards() from the class [PlayerActionService]
+     */
+    @Test
+    fun testSwapAllCards(){
+        val game = SchwimmenGameRootService()
+        val playerNames = arrayOf("Max", "Alex", "Sofia")
+        //test for when SwapAllCards is called and there is no game
+        assertFailsWith<IllegalStateException> { game.playerActionService.swapAllCards() }
+        game.gameService.startNewGame(playerNames)
+        //test if the method has worked correctly
+        assertDoesNotThrow { game.playerActionService.swapAllCards() }
+    }
+
+    /**
+     * Tests for the method pass() from the class [PlayerActionService]
+     */
+    @Test
+    fun testPass(){
+        val game = SchwimmenGameRootService()
+        val playerNames = arrayOf("Max", "Alex", "Sofia")
+        //test for when SwapAllCards is called and there is no game
+        assertFailsWith<IllegalStateException> { game.playerActionService.pass() }
+        game.gameService.startNewGame(playerNames)
+        //test for when not all players have passes
+        game.playerActionService.pass()
+        assertTrue { game.currentGame?.currentPlayerIndex == 1 }
+        //test for when everybody has passed and there are cards in the stack
+        //card stack is equal to 20 at the start should be 17 after calling pass
+        game.currentGame?.passCount = 2
+        game.playerActionService.pass()
+        assertTrue { game.currentGame?.cardStack?.size == 17 }
+        //test for when everybody passes and the card stack is less than 3
+        //game should be ended by calling endGame() when pass() is called
+        game.currentGame = null
+        game.gameService.startNewGame(playerNames)
+        game.currentGame?.passCount = 2
+        game.currentGame?.cardStack?.clear()
+        game.playerActionService.pass()
+        assertTrue { game.currentGame == null }
+    }
+
+    /**
+     * Tests for the method knock() from the class [PlayerActionService]
+     */
+    @Test
+    fun testKnock(){
+        val game = SchwimmenGameRootService()
+        val playerNames = arrayOf("Max", "Alex", "Sofia")
+        //test for when knock() is called and there is no game
+        assertFailsWith<IllegalStateException> { game.playerActionService.knock() }
+        game.gameService.startNewGame(playerNames)
+        //test if someone has knocked already but someone else knocks
+        game.currentGame?.knocked = game.currentGame?.players?.get(0)
+        assertFailsWith<IllegalStateException> { game.playerActionService.knock() }
+        //test if someone knocks and nobody has knocked
+        game.currentGame = null
+        game.gameService.startNewGame(playerNames)
+        game.playerActionService.knock()
+        assertTrue { game.currentGame?.knocked == game.currentGame?.players?.get(0) }
     }
 }
