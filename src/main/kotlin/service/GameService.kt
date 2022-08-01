@@ -86,6 +86,7 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
 
     /**
      * private method for generating the stack of cards, which will be shuffled as well and returned
+     * @return returns stack of [SchwimmenCard]s
      */
     private fun generateCards(): Stack<SchwimmenCard>{
 
