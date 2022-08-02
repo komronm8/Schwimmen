@@ -11,8 +11,10 @@ class SchwimmenGameTest{
 
     private fun createCards(numCards: Int): MutableList<SchwimmenCard> {
         val cards = mutableListOf<SchwimmenCard>()
-        for (i in 1..numCards) {
+        var i = 1
+        while(i < numCards) {
             cards.add(SchwimmenCard(CardSuit.CLUBS, CardValue.ACE))
+            i++
         }
         return cards
     }
