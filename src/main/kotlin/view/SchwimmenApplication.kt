@@ -7,14 +7,40 @@ class SchwimmenApplication : BoardGameApplication("Schwimmen") {
 
     private val rootService = SchwimmenGameRootService()
 
-    private val gameScene = SchwimmenGameScene()
+    private val gameScene = SchwimmenGameScene(rootService)
 
-    private val startMenuScene = NewGameMenuScene()
+    private val startMenuScene = NewGameMenuScene(rootService).apply {
+        var playerCount = 2
+        quitButton.onMouseClicked = {
+            exit()
+        }
+        addPlayerButton.onMouseClicked = {
+            if(playerCount == 2){
+                addComponents(player3Input, player3Label)
+                playerCount++
+            }
+            else if(playerCount == 3){
+                addComponents(player4Input, player4Label)
+                playerCount++
+            }
+        }
+        removePLayerButton.onMouseClicked = {
+            if(playerCount == 3){
+                removeComponents(player3Input, player3Label)
+                playerCount--
+            }
+            else if(playerCount == 4){
+                removeComponents(player4Input, player4Label)
+                playerCount--
+            }
+        }
+    }
 
     private val endMenuScene = GameFinishedMenuScene()
 
     init {
         this.showGameScene(gameScene)
+        this.showMenuScene(startMenuScene)
     }
 
 }
