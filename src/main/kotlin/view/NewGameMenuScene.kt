@@ -84,7 +84,7 @@ class NewGameMenuScene(private val rootService: SchwimmenGameRootService):
         height = 60,
         posX = 100,
         posY = 590,
-        text = "Player 3",
+        text = "Player 4",
         font = Font(fontWeight = Font.FontWeight.BOLD, size = 30),
         visual = ColorVisual(255,255,255)
     )

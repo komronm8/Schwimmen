@@ -27,10 +27,12 @@ class SchwimmenApplication : BoardGameApplication("Schwimmen") {
         removePLayerButton.onMouseClicked = {
             if(playerCount == 3){
                 removeComponents(player3Input, player3Label)
+                player3Input.text = ""
                 playerCount--
             }
             else if(playerCount == 4){
                 removeComponents(player4Input, player4Label)
+                player4Input.text = ""
                 playerCount--
             }
         }
