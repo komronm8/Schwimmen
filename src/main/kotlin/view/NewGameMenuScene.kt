@@ -11,7 +11,7 @@ import java.awt.Color
 import tools.aqua.bgw.components.uicomponents.TextField
 
 class NewGameMenuScene(private val rootService: SchwimmenGameRootService):
-    MenuScene(1000, 1000, ImageVisual("Background_wood_cut.png")) {
+    MenuScene(1000, 1000, ImageVisual("Background_wood_cut.png")), Refreshable {
 
     private val playerSelectionLabel = Label(
         width = 800,
@@ -106,7 +106,11 @@ class NewGameMenuScene(private val rootService: SchwimmenGameRootService):
         text = "START GAME",
         font = Font(color = Color.WHITE, fontWeight = Font.FontWeight.BOLD, size = 36),
         visual = ImageVisual("button.png")
-    )
+    ).apply {
+        onMouseClicked = {
+            rootService.gameService.startNewGame(getPlayers())
+        }
+    }
 
     val quitButton = Button(
         width = 150,
@@ -133,6 +137,23 @@ class NewGameMenuScene(private val rootService: SchwimmenGameRootService):
         posY = 800,
         visual = ImageVisual("minus.png")
     )
+
+    private fun getPlayers():Array<String> {
+        val result = mutableListOf<String>()
+        if(player1Input.text.trim() != ""){
+            result.add(player1Input.text.trim())
+        }
+        if(player2Input.text.trim() != ""){
+            result.add(player2Input.text.trim())
+        }
+        if(player3Input.text.trim() != ""){
+            result.add(player3Input.text.trim())
+        }
+        if(player4Input.text.trim() != ""){
+            result.add(player4Input.text.trim())
+        }
+        return result.toTypedArray()
+    }
 
     init {
         addComponents(playerSelectionLabel,
