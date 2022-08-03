@@ -3,7 +3,7 @@ package view
 import service.SchwimmenGameRootService
 import tools.aqua.bgw.core.BoardGameApplication
 
-class SchwimmenApplication : BoardGameApplication("Schwimmen") {
+class SchwimmenApplication : BoardGameApplication("Schwimmen"), Refreshable {
 
     private val rootService = SchwimmenGameRootService()
 
@@ -38,12 +38,23 @@ class SchwimmenApplication : BoardGameApplication("Schwimmen") {
         }
     }
 
-    private val endMenuScene = GameFinishedMenuScene()
+    private val endMenuScene = GameFinishedMenuScene(rootService)
 
     init {
         this.showGameScene(gameScene)
         this.showMenuScene(startMenuScene)
+        rootService.addRefreshables(
+            this,
+            startMenuScene,
+            gameScene,
+            endMenuScene
+        )
     }
+
+    override fun refreshAfterStartNewGame() {
+        this.hideMenuScene()
+    }
+
 
 }
 
