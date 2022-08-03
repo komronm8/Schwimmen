@@ -22,6 +22,11 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
         if(root.currentGame != null){
             throw IllegalStateException("There is a game running already!")
         }
+        for( i in playerNames){
+            if( i == "" ){
+                throw IllegalArgumentException("Name should not be empty!")
+            }
+        }
         val stackOfCards = generateCards()
         val tableCards = stackOfCards.popAll(3).toMutableList()
         // checks if amount of playerNames are valid
@@ -31,7 +36,7 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
             players.add(SchwimmenPlayer(stackOfCards.popAll(3).toMutableList(),playerNames[i]))
         }
         root.currentGame = SchwimmenGame(players, tableCards, stackOfCards)
-        onAllRefreshables(Refreshable::refreshAfterStartNewGame)
+        onAllRefreshables{ refreshAfterStartNewGame() }
     }
 
     /**
