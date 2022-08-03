@@ -61,7 +61,6 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
     fun endGame(): Unit{
         val game = root.currentGame
         checkNotNull(game){"There is no game!"}
-        root.currentGame = null
         onAllRefreshables { refreshAfterGameEnd() }
     }
 
