@@ -6,6 +6,9 @@ import tools.aqua.bgw.util.*
  * @param players list of [SchwimmenPlayer]s
  * @param tableCards list of [SchwimmenCard]s on the table
  * @param cardStack stack of [SchwimmenCard]s which are in the deck
+ * @throws IllegalArgumentException: when the player amount is not between 2 and 4,
+ * when the amount of table cards are not equal to three,
+ * when the stack is empty or when the amount is higher than 32
  */
 class SchwimmenGame(
     val players: List<SchwimmenPlayer>,
