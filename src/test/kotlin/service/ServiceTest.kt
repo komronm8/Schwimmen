@@ -51,7 +51,6 @@ class ServiceTest {
     @Test
     fun testEndGame(){
         val game = SchwimmenGameRootService()
-        val playerNames = arrayOf("Max", "Alex", "Sofia")
         //test to see weather game can be ended when there is no game
         assertFailsWith<IllegalStateException> { game.gameService.endGame() }
     }
