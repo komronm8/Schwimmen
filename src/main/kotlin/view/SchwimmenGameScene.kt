@@ -16,7 +16,14 @@ import tools.aqua.bgw.util.Font
 import java.awt.Color
 import tools.aqua.bgw.util.Stack
 
-
+/**
+ * This is the main thing for the Schwimmen game. The scene shows the complete table at once.
+ * There is a current player where is sat down on the bottom, and 3 other players that are to
+ * the right, left and top of him.
+ * Each player has 3 cards in their hand and the options to knock, pass, swap one card or all of them.
+ * Clicking on the buttons triggers the corresponding player's actions.
+ * At the end of the players turn the currentPlayer will change to the next one in the queue
+ */
 class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
     BoardGameScene(1920, 1080, ImageVisual("Background_green.png")), Refreshable {
 
@@ -30,6 +37,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
 
     private var swapTableCard = 0
 
+    //bottom player(current player) layout and label
     private var currentPlayerHandLayout: LinearLayout<CardView> = LinearLayout(
         height = 220,
         width = 600,
@@ -49,6 +57,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         visual = ColorVisual(255,255,255, 50)
     )
 
+    //top player layout and label
     private var topPlayerHandLayout: LinearLayout<CardView> = LinearLayout(
         height = 220,
         width = 600,
@@ -68,6 +77,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         visual = ColorVisual(255,255,255, 50)
     )
 
+    //left player layout and label
     private var leftPlayerHandLayout: LinearLayout<CardView> = LinearLayout(
         height = 220,
         width = 600,
@@ -87,6 +97,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         visual = ColorVisual(255,255,255, 50)
     )
 
+    //right player layout and label
     private var rightPlayerHandLayout: LinearLayout<CardView> = LinearLayout(
         height = 220,
         width = 600,
@@ -106,6 +117,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         visual = ColorVisual(255,255,255, 50)
     )
 
+    //table card layout
     private var tableCardsLayout: LinearLayout<CardView> = LinearLayout(
         height = 220,
         width = 600,
@@ -116,6 +128,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         visual = ColorVisual(255, 255, 255, 50)
     )
 
+    //card stack layout
     private var cardStackLayout: CardStack<CardView> = CardStack(
         height = 220,
         width = 150,
@@ -125,6 +138,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         visual = ColorVisual(255, 255, 255, 50)
     )
 
+    //action buttons
     private val swapAllButton = Button(
         height = 60,
         width = 200,
@@ -154,6 +168,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         }
     }
 
+    //swapOne player hand cards choose buttons
     private val swapPLayerCardButton1 = Button(
         height = 50,
         width = 120,
@@ -196,6 +211,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         }
     }
 
+    //swapOne table cards choose buttons
     private val swapTableCardButton1 = Button(
         height = 50,
         width = 120,
@@ -238,6 +254,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         }
     }
 
+    //knocked layout and knocked person label
     private val knockButton = Button(
         height = 60,
         width = 200,
@@ -263,6 +280,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         font = Font(color = Color.WHITE, fontWeight = Font.FontWeight.BOLD, size = 36)
     )
 
+    //pass button
     private val passButton = Button(
         height = 60,
         width = 200,
@@ -277,6 +295,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         }
     }
 
+    //label for the amount of cards in the stack left
     private val cardStackCountLabel = Label(
         height = 60,
         width = 200,
@@ -344,6 +363,25 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
             removeComponents(i)
         }
         knockedPersonLabel.text = ""
+    }
+
+    private fun changeCurrentPlayer(
+        layouts: MutableList<LinearLayout<CardView>>, nameLabels: MutableList<Label>){
+        val tempCardsList = mutableListOf<List<CardView>>()
+        val tempNameList = mutableListOf<String>()
+        for ( i in layouts){
+            tempCardsList.add(i.components)
+            i.clear()
+        }
+        for(i in nameLabels){
+            tempNameList.add(i.text)
+        }
+        for( i in 0 until layouts.size ){
+            layouts[i].addAll(tempCardsList[(i+1) % layouts.size])
+            nameLabels[i].text = tempNameList[(i+1) % layouts.size]
+            layouts[i].forEach{ CardView -> CardView.showBack() }
+        }
+        currentPlayerHandLayout.forEach{ CardView -> CardView.showFront() }
     }
 
     init {
@@ -430,24 +468,6 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         playAnimation(delay)
     }
 
-    private fun changeCurrentPlayer(
-        layouts: MutableList<LinearLayout<CardView>>, nameLabels: MutableList<Label>){
-        val tempCardsList = mutableListOf<List<CardView>>()
-        val tempNameList = mutableListOf<String>()
-        for ( i in layouts){
-            tempCardsList.add(i.components)
-            i.clear()
-        }
-        for(i in nameLabels){
-            tempNameList.add(i.text)
-        }
-        for( i in 0 until layouts.size ){
-            layouts[i].addAll(tempCardsList[(i+1) % layouts.size])
-            nameLabels[i].text = tempNameList[(i+1) % layouts.size]
-            layouts[i].forEach{ CardView -> CardView.showBack() }
-        }
-        currentPlayerHandLayout.forEach{ CardView -> CardView.showFront() }
-    }
 
     override fun refreshAfterSwapCards() {
         val game = rootService.currentGame
