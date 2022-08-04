@@ -9,6 +9,11 @@ import tools.aqua.bgw.util.Font
 import tools.aqua.bgw.visual.ImageVisual
 import java.awt.Color
 
+/**
+ * [MenuScene] that is displayed when the game is finished. It shows the final result of the game
+ * as well as the score. Also, there are two buttons: one for starting a new game with the same players
+ * and one for quitting the program.
+ */
 class GameFinishedMenuScene(private val rootService: SchwimmenGameRootService):
     MenuScene(1000,1000, ImageVisual("Background_wood_cut.png")), Refreshable {
 
