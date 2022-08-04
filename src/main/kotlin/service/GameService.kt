@@ -1,7 +1,6 @@
 package service
 
 import entity.*
-import view.Refreshable
 import tools.aqua.bgw.util.Stack
 
 /**
@@ -48,7 +47,7 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
      * method used to start a new game with the same players
      * @throws IllegalStateException if there is no game for starting a new one
      */
-    fun nextGame(): Unit{
+    fun nextGame(){
         val game = root.currentGame
         checkNotNull(game){"There is no game to start new round!"}
         val players = mutableListOf<String>()
@@ -63,7 +62,7 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
      * method to end the game
      * @throws IllegalStateException if there is no game to end
      */
-    fun endGame(): Unit{
+    fun endGame(){
         val game = root.currentGame
         checkNotNull(game){"There is no game!"}
         onAllRefreshables { refreshAfterGameEnd() }
@@ -74,7 +73,7 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
      * the game will end by calling endGame(), otherwise it just goes to the next player
      * @throws IllegalStateException if no game exists
      */
-    fun nextPlayer(): Unit{
+    fun nextPlayer(){
         val game = root.currentGame
         checkNotNull(game){"There is no game!"}
         //find next player
