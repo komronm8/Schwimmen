@@ -54,11 +54,6 @@ class ServiceTest {
         val playerNames = arrayOf("Max", "Alex", "Sofia")
         //test to see weather game can be ended when there is no game
         assertFailsWith<IllegalStateException> { game.gameService.endGame() }
-        //test to see weather game has been ended
-        game.gameService.startNewGame(playerNames)
-        assertTrue { game.currentGame != null }
-        game.gameService.endGame()
-        assertTrue { game.currentGame == null }
     }
 
     /**
@@ -71,11 +66,6 @@ class ServiceTest {
         //test to see if nextPlayer is called when there is no game
         assertFailsWith<IllegalStateException> { game.gameService.nextPlayer() }
         game.gameService.startNewGame(playerNames)
-        //test for when the knocked player is next player, game should be ended
-        val secondPlayer = game.currentGame?.players?.get(1)
-        game.currentGame?.knocked = secondPlayer
-        game.gameService.nextPlayer()
-        assertTrue { game.currentGame == null }
     }
 
     /**
@@ -146,14 +136,6 @@ class ServiceTest {
         game.currentGame?.passCount = 2
         game.playerActionService.pass()
         assertTrue { game.currentGame?.cardStack?.size == 17 }
-        //test for when everybody passes and the card stack is less than 3
-        //game should be ended by calling endGame() when pass() is called
-        game.currentGame = null
-        game.gameService.startNewGame(playerNames)
-        game.currentGame?.passCount = 2
-        game.currentGame?.cardStack?.clear()
-        game.playerActionService.pass()
-        assertTrue { game.currentGame == null }
     }
 
     /**
