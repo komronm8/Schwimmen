@@ -36,6 +36,11 @@ class GameService(private val root: SchwimmenGameRootService): AbstractRefreshin
             players.add(SchwimmenPlayer(stackOfCards.popAll(3).toMutableList(),playerNames[i]))
         }
         root.currentGame = SchwimmenGame(players, tableCards, stackOfCards)
+        val game = root.currentGame
+        checkNotNull(game)
+        for ( i in game.players){
+            root.playerActionService.calculatePlayerPoints(i)
+        }
         onAllRefreshables{ refreshAfterStartNewGame() }
     }
 
