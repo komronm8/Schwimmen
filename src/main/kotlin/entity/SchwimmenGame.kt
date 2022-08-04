@@ -1,6 +1,12 @@
 package entity
 import tools.aqua.bgw.util.*
 
+/**
+ * Entity class that represents a game state of "Schwimmen".
+ * @param players list of [SchwimmenPlayer]s
+ * @param tableCards list of [SchwimmenCard]s on the table
+ * @param cardStack stack of [SchwimmenCard]s which are in the deck
+ */
 class SchwimmenGame(
     val players: List<SchwimmenPlayer>,
     val tableCards: MutableList<SchwimmenCard>,
