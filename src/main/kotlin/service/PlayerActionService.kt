@@ -17,7 +17,7 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
      * @throws IllegalStateException if tableCard is not a real table card or if playerCard is not a real
      * player card
      */
-    fun swapOneCard(tableCard: SchwimmenCard, playerCard: SchwimmenCard): Unit{
+    fun swapOneCard(tableCard: SchwimmenCard, playerCard: SchwimmenCard){
         val game = root.currentGame
         checkNotNull(game)
         val currentPlayer = game.players[game.currentPlayerIndex]
@@ -47,7 +47,7 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
      * Swaps all the cards from the players hand with the table cards
      * @throws IllegalStateException if no game has started yet
      */
-    fun swapAllCards(): Unit{
+    fun swapAllCards(){
         val game = root.currentGame
         checkNotNull(game)
         val currentPlayer = game.players[game.currentPlayerIndex]
@@ -71,7 +71,7 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
      * and passes to the next player
      * @throws IllegalStateException if no game has started yet
      */
-    fun pass(): Unit{
+    fun pass(){
         val game = root.currentGame
         checkNotNull(game)
         game.passCount++
@@ -103,7 +103,7 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
      * @throws IllegalStateException if no game has started yet
      * @throws IllegalStateException if someone has already knocked
      */
-    fun knock(): Unit{
+    fun knock(){
         val game = root.currentGame
         checkNotNull(game)
         if(game.knocked != null){
@@ -115,11 +115,11 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
     }
 
     /**
-     * Private function to calculate the points of the player. Checks if the player has the same type of
+     * Function to calculate the points of the player. Checks if the player has the same type of
      * card values, else just calculates as usual by summing the values
      * @param player the [SchwimmenPlayer] that will get its points calculated
      */
-    private fun calculatePlayerPoints(player: SchwimmenPlayer): Unit{
+    fun calculatePlayerPoints(player: SchwimmenPlayer){
         val playerHand = player.playerCards
         var isSameTyped = true
         //check if all the cards are the same type
@@ -132,11 +132,14 @@ class PlayerActionService(private val root: SchwimmenGameRootService): AbstractR
         if(isSameTyped){
             player.points = 30.5f
         }
-        //otherwise calculate points by finding the highest sum of the card values
-        //which have the same card suit
-        var result = 0.0f
-        for(suit in CardSuit.values()){
-            result = max(result, getSum( suit, playerHand ))
+        else{
+            //otherwise calculate points by finding the highest sum of the card values
+            //which have the same card suit
+            var result = 0.0f
+            for(suit in CardSuit.values()){
+                result = max(result, getSum( suit, playerHand ))
+            }
+            player.points = result
         }
     }
 
