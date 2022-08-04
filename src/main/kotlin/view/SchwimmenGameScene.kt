@@ -468,7 +468,6 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         playAnimation(delay)
     }
 
-
     override fun refreshAfterSwapCards() {
         val game = rootService.currentGame
         checkNotNull(game) {"No started game found."}
@@ -492,10 +491,6 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
 
         createStack(game.cardStack, cardStackLayout)
         cardStackCountLabel.text = "${rootService.currentGame?.cardStack?.size} cards left"
-    }
-
-    override fun refreshAfterGameEnd() {
-        lock()
     }
 
 }
