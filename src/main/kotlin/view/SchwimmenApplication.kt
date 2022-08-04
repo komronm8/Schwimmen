@@ -38,7 +38,11 @@ class SchwimmenApplication : BoardGameApplication("Schwimmen"), Refreshable {
         }
     }
 
-    private val endMenuScene = GameFinishedMenuScene(rootService)
+    private val endMenuScene = GameFinishedMenuScene(rootService).apply {
+        exitButton.onMouseClicked = {
+            exit()
+        }
+    }
 
     init {
         this.showGameScene(gameScene)
@@ -55,6 +59,9 @@ class SchwimmenApplication : BoardGameApplication("Schwimmen"), Refreshable {
         this.hideMenuScene()
     }
 
+    override fun refreshAfterGameEnd() {
+        this.showMenuScene(endMenuScene)
+    }
 
 }
 

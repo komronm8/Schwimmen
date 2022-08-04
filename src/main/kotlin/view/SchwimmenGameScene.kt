@@ -11,7 +11,6 @@ import tools.aqua.bgw.components.gamecomponentviews.CardView
 import tools.aqua.bgw.components.container.*
 import tools.aqua.bgw.core.Alignment
 import tools.aqua.bgw.components.uicomponents.Button
-import tools.aqua.bgw.components.uicomponents.CheckBox
 import tools.aqua.bgw.components.uicomponents.Label
 import tools.aqua.bgw.util.Font
 import java.awt.Color
@@ -331,19 +330,37 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
         }
     }
 
+    private fun clearMap(){
+        val components = arrayOf(tableCardsLayout, cardStackLayout, currentPlayerHandLayout,
+            topPlayerHandLayout, leftPlayerHandLayout, rightPlayerHandLayout,
+            currentPlayerLabel, topPlayerLabel, leftPlayerLabel, rightPlayerLabel,
+            cardStackCountLabel, knockedPersonLabel)
+        val layouts = arrayOf(tableCardsLayout, cardStackLayout, currentPlayerHandLayout,
+            topPlayerHandLayout, leftPlayerHandLayout, rightPlayerHandLayout)
+        for ( i in layouts ){
+            i.clear()
+        }
+        for ( i in components ){
+            removeComponents(i)
+        }
+        knockedPersonLabel.text = ""
+    }
+
     init {
         leftPlayerHandLayout.rotate(90)
         rightPlayerHandLayout.rotate(-90)
         background = ColorVisual(108, 168, 59)
-        addComponents(tableCardsLayout, swapAllButton, swapOneButton,
-        knockButton, passButton, cardStackLayout, knockedPersonLabel)
+        addComponents(swapAllButton, swapOneButton, knockButton, passButton)
     }
 
     override fun refreshAfterStartNewGame() {
         val game = rootService.currentGame
         checkNotNull(game) {"No started game found."}
-
         playerAmount = rootService.currentGame?.players?.size
+
+        clearMap()
+
+        addComponents(tableCardsLayout, cardStackLayout, knockedPersonLabel)
 
         val playerNames = game.players
 
@@ -458,6 +475,7 @@ class SchwimmenGameScene(private val rootService: SchwimmenGameRootService):
     }
 
     override fun refreshAfterGameEnd() {
+        lock()
     }
 
 }
