@@ -10,6 +10,11 @@ import tools.aqua.bgw.visual.ImageVisual
 import java.awt.Color
 import tools.aqua.bgw.components.uicomponents.TextField
 
+/**
+ * [MenuScene] that is used for starting a new game. It is displayed directly at program start.
+ * After providing the names of both players, [startGameButton] can be pressed.
+ * There is also a [quitButton] to end the program.
+ */
 class NewGameMenuScene(private val rootService: SchwimmenGameRootService):
     MenuScene(1000, 1000, ImageVisual("Background_wood_cut.png")), Refreshable {
 
@@ -138,6 +143,7 @@ class NewGameMenuScene(private val rootService: SchwimmenGameRootService):
         visual = ImageVisual("minus.png")
     )
 
+    //Function to get an array of the names back
     private fun getPlayers():Array<String> {
         val result = mutableListOf<String>()
         if(player1Input.text.trim() != ""){
